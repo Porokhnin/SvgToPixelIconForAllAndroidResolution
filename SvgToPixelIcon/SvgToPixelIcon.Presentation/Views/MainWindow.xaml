@@ -1,0 +1,98 @@
+﻿<Window x:Class="SvgToPixelIcon.Presentation.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:behaviours="clr-namespace:SvgToPixelIcon.Presentation.Behaviours"
+        Title="Конвертор" 
+        WindowState="Maximized">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo/>
+    </Window.TaskbarItemInfo>
+    
+    <Grid IsSharedSizeScope="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0" >
+            <MenuItem Header="Меню">
+                <MenuItem Header="Выход" Command="{Binding Path=ExitCommand}"/>                
+            </MenuItem>
+        </Menu>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="FirstColumn"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0"
+                    Style="{StaticResource ButtonStyle}"
+                    Command="{Binding Path=SelectSvgDirectoryCommand}"
+                    Content="Выбрать папку с SVG"
+                    Margin="5"/>
+            <TextBox Grid.Row="0" Grid.Column="1"
+                     Text="{Binding Path=SvgDirectoryPath}"
+                     Margin="5"/>
+        </Grid>
+        <Grid Grid.Row="2"
+              Visibility="{Binding Path=TreeVisibility, Converter={StaticResource BooleanToVisibilityConverter}}" 
+              Height="300" MaxHeight="300" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0"
+                    CornerRadius="1" BorderThickness="1" BorderBrush="Gainsboro" 
+                    Margin="5,0,5,0">
+                <ContentPresenter Content="{Binding DirectoryTreeViewModel.View}"/>
+            </Border>
+            
+            <Border Grid.Column="1"
+                    CornerRadius="1" BorderThickness="1" BorderBrush="Gainsboro" 
+                    Margin="5,0,5,0">
+                <Grid>
+                    <ContentPresenter Content="{Binding ConfigurationTreeViewModel.View}"/>
+                    <ProgressBar Visibility="{Binding Path=ConfigurationProgressVisibility, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                 Height="20" IsIndeterminate="True"/>
+                </Grid>
+            </Border>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="FirstColumn"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="FirstColumn"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"
+                    Style="{StaticResource ButtonStyle}"
+                    Command="{Binding Path=SelectOutputDirectoryCommand}"
+                    Content="Выбрать выходную папку"
+                    Margin="5"/>
+            <TextBox Grid.Column="1"
+                     Text="{Binding Path=OutputDirectoryPath}"
+                     Margin="5"/>
+            <Button Grid.Column="2"
+                    Style="{StaticResource ButtonStyle}"
+                    Command="{Binding Path=PaintSvgToPngCommand}"
+                    Content="Сделать магию"
+                    Margin="5"/>
+        </Grid>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0"
+                     behaviours:TextBoxScrollBehaviour.ScrollOnTextChanged="True" 
+                     Text="{Binding Path=OutputText}"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto"
+                     AcceptsReturn="True"
+                     Margin="5"/>
+        </Grid>
+    </Grid>
+</Window>
